@@ -8,7 +8,7 @@ int main()
 }
 
 void logIn() {
-
+  
 }
 
 void menu()
@@ -19,7 +19,7 @@ void menu()
 	printf("Enter \"x\" to Sign Out.\n");
 }
 
-void AdminMenu()
+void adminMenu()
 {
 	printf("Enter \"a\" to add a book to the library.\n");
 	printf("Enter \"d\" to delete a book from the library.\n");

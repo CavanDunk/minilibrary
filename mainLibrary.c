@@ -1,13 +1,11 @@
 #include<stdio.h>
 #include<string.h>
-HEAD
 
 #define username_size 8
 
 void menu();
 int countlines();
 void bookAdd();
-// a7ecafd7a85db7906a7b339f7be6a727da893cfe
 
 int main()
 {

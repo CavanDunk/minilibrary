@@ -1,14 +1,18 @@
 #include<stdio.h>
 #include<string.h>
 
+#define username_size 8
 
 int main()
 {
+	FILE *fptr;
+	fptr = fopen("/Users/Documents/GitHub/minilibrary/UserInfo.txt","r");
+
 	menu();
 }
 
 void logIn() {
-  
+
 }
 
 void menu()

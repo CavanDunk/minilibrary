@@ -1,9 +1,12 @@
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 
 // prototypes
 int add_user();
 int getdata_user(int choice);
+int checkUserId(int n);
+int lineCount();
 
 // list of global variables
 char choice;
@@ -30,10 +33,10 @@ int add_user() {
     printf("Enter your choice: ");
     scanf("%d",&choice);
     fp = fopen("uRecord.txt","ab+");
-    if(getdata_user(choice)==1){
+    if(setdata_user(choice)==1){
       user.cat=catagories_u[choice-1];
       fseek(fp,0,SEEK_END);
-      fwrite(&user,sizeof(user),1,fp);
+      fprintf(fp,"%d,%s,%s,%s\n",user.id,user.name,user.pass,user.cat);
       fclose(fp);
       printf("The record is sucessfully saved");
     }
@@ -41,19 +44,77 @@ int add_user() {
     return 1;
 }
 
-int getdata_user(int choice) {
-  int x1 = 30;
+int setdata_user(int choice) {
   int userID;
-  printf("Enter info below\n");
-  printf("category: "); printf("%s",catagories_u[choice-1]);
-  printf("\nuser ID: "); scanf("%d",&userID);
 
-  if(user.id==userID) {
-    printf("id already exist");
+  printf("Enter your info below.\n");
+
+  // Displays the selected user category
+  printf("Category: ");
+  printf("%s\n",catagories_u[choice-1]);
+
+  // Enter User ID and store in id variable in struct user
+  printf("User ID: ");
+  scanf("%d",&userID);
+
+  // Checks for an existing user ID
+  checkUserId(userID);
+  user.id=userID;
+
+  // Enter username and stores it in name[] in struct user
+  printf("User Name: ");
+  scanf("%s",user.name);
+
+  //Enter password and stores it in pass[] in struct user
+  printf("Password: ");
+  scanf("%s",user.pass);
+
+  return 1;
+}
+
+int checkUserId(int n) {
+  char buf[128];
+  int id;
+  int ID[lineCount()];
+  int i = 0;
+
+  FILE *fp;
+  fp = fopen("uRecord.txt","r");
+
+  while(fscanf(fp,"%d",&id)==1) {
+    ID[i] = id;
+    i++;
+  }
+  fclose(fp);
+
+  for (int j = 0; j < lineCount(); j++) {
+    if(n == ID[j]) {
+      printf("ID already exists.\n");
+      //main();
+      exit(0); // replace with main(); later
+    }
+  }
+  return 1;
+}
+
+int lineCount() {
+  FILE *fp;
+  int count = 0;
+  char filename[1000];
+  char c;
+
+  fp = fopen("/Users/jnguyen/Documents/GitHub/minilibrary/UserInfo.txt", "r");
+
+  if (fp == NULL) {
+    printf("Could not open file.");
+    return 0;
   }
 
-  user.id=userID;
-  printf("\nusername: "); scanf("%s",user.name);
-  printf("\npassword: "); scanf("%s",user.pass);
-  return 1;
+  for (c = getc(fp); c != EOF; c = getc(fp)) {
+      if (c == '\n') {
+        count = count + 1;
+      }
+  }
+  fclose(fp);
+  return count;
 }

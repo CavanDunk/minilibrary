@@ -29,7 +29,7 @@ int add_user() {
     int i, choice;
     printf("Enter your choice: ");
     scanf("%d",&choice);
-    fp = fopen("uRecord.dat","ab+");
+    fp = fopen("uRecord.txt","ab+");
     if(getdata_user(choice)==1){
       user.cat=catagories_u[choice-1];
       fseek(fp,0,SEEK_END);

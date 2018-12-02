@@ -19,6 +19,7 @@ int pass();
 void quit();
 int lineCount();
 int countLines();
+int postAddBook();
 
 
 // Global variables
@@ -100,38 +101,37 @@ int uMenu() {
 // Admin Main Options
 int addBook() {
   char title[100];
-  char author[150];
-  int feel = 1, success = 1;
-  char try[2];
-  FILE *fp;
+	char author[150];
+	//id=0;
+	char try[2];
+	FILE *fp;
 
-  fp = fopen("/Users/jnguyen/Documents/GitHub/minilibrary/Mylibrary.txt","a");
+	fp = fopen("Mylibrary.txt","a");
 
-  printf("Enter Book Title: ");
-  scanf("%[^'\n]s", title);
-  printf(" ");
-  printf("Enter Author's Name: ");
-  scanf(" %[^'\n]s",author);
+	printf("Enter Book Title: ");
+	scanf("%[^'\n]s", title);
+	printf(" ");
+	printf("Enter Author's Name: ");
+	scanf(" %[^'\n]s",author);
 
-  bookId = countLines();
+	bookId=countlines();
 
-  fprintf(fp,"%d,%s,%s,library,null,null\n",bookId,title,author);
-  fclose(fp);
-  printf("Book %s was added successfully!\n",title);
-  while (feel != 0) {
-    printf("Press T to try again or B to go back to the main menu.");
-    scanf("%c",try);
-    if (strcasecmp(try,"t")==0) {
-      addBook();
-    } else if (strcasecmp(try,"b")==0) {
-      success = 0;
-    }
-  }
 
-  if (success == 0) {
-    adminMain();
-  }
-
+	fprintf(fp,"%d,%s,%s,library,null,null\n",bookId,title,author);
+	fclose(fp);
+	printf("Book %s was added succesfully!\n",title);
+	while(feel != 0)
+	{
+		printf("Press t to try again or b to go back to the main menu");
+		scanf(%c,try);
+		if(strcasecmp(try,"t")== 0)
+		{
+			addBook();
+		}
+		else if(strcasecmp(try,"b") == 0)
+		{
+			adminMenu();
+		}
   return 0;
 }
 

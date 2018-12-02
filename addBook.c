@@ -27,7 +27,7 @@ void deleteBook()
 	fp2 = fopen("copy.txt","w");
 	while(!feof(fp))
 	{
-		
+
 		strcpy(file, "\0");
 		fgets(file, 50, fp);
 		sscanf(file,"%d,%[^,],[^,],",&rando,title,name);
@@ -36,7 +36,7 @@ void deleteBook()
 			fprintf(fp2,"%s",file);
 		}
 	}
-	
+
 	fclose(fp);
 	fclose(fp2);
 	remove("Mylibrary.txt");
@@ -54,17 +54,17 @@ void deleteBook()
 			adminMenu();
 		}
 	}
-			
+
 }
 void addBook()
 {
 	char title[100];
 	char author[150];
-	//id=0;	
+	//id=0;
 	char try[2];
 	FILE *fp;
-	
-	fp = fopen("Mylibrary.txt","a");	
+
+	fp = fopen("Mylibrary.txt","a");
 
 	printf("Enter Book Title: ");
 	scanf("%[^'\n]s", title);
@@ -73,8 +73,8 @@ void addBook()
 	scanf(" %[^'\n]s",author);
 
 	bookId=countlines();
-	
-	
+
+
 	fprintf(fp,"%d,%s,%s,library,null,null\n",bookId,title,author);
 	fclose(fp);
 	printf("Book %s was added succesfully!\n",title);
@@ -123,4 +123,3 @@ void printText()
 	}
 	fclose(fp);
 }
-	

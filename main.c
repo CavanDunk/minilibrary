@@ -1,10 +1,12 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#define USERSIZE 20
+
 // Prototypes
 int adminMain();
 int userMain();
+int aMain();
+int uMain();
 int addBook();
 int deleteBook();
 int checkOut();
@@ -16,10 +18,12 @@ int login();
 int pass();
 void quit();
 int lineCount();
+int countLines();
+
 
 // Global variables
 char choice;
-int l = lineCount(); // # of lines in UserInfo.txt
+int bookId = 1;
 
 struct USER {
   int id;
@@ -38,6 +42,7 @@ int main() {
 }
 
 int adminMain() {
+
   scanf("%c",&choice);
   switch(choice) {
     case 'a':
@@ -51,7 +56,10 @@ int adminMain() {
     case 'x':
       quit();
     default:
-      printf("Invalid input\n");
+      printf("Welcome to the ADMIN MENU.\n");
+      aMain();
+      printf("What would you like to do? ");
+      adminMain();
   }
   return 0;
 }
@@ -72,8 +80,58 @@ int userMain() {
   return 0;
 }
 
+int aMain() {
+  printf("Enter \"a\" to add a book to the library.\n");
+	printf("Enter \"d\" to delete a book from the library.\n");
+	printf("Enter \"o\" to check out a book.\n");
+	printf("Enter \"r\" to return a book.\n");
+	printf("Enter \"x\" Sign Out.\n");
+  return 0;
+}
+
+int uMenu() {
+  printf("Enter \"q\" for book querry by author sorted by book title.\n");
+  printf("Enter \"s\" for the status of a specific book.\n");
+  printf("Enter \"u\" to list the books you have checked out.\n");
+  printf("Enter \"x\" to Sign Out.\n");
+  return 0;
+}
+
 // Admin Main Options
 int addBook() {
+  char title[100];
+  char author[150];
+  int feel = 1, success = 1;
+  char try[2];
+  FILE *fp;
+
+  fp = fopen("/Users/jnguyen/Documents/GitHub/minilibrary/Mylibrary.txt","a");
+
+  printf("Enter Book Title: ");
+  scanf("%[^'\n]s", title);
+  printf(" ");
+  printf("Enter Author's Name: ");
+  scanf(" %[^'\n]s",author);
+
+  bookId = countLines();
+
+  fprintf(fp,"%d,%s,%s,library,null,null\n",bookId,title,author);
+  fclose(fp);
+  printf("Book %s was added successfully!\n",title);
+  while (feel != 0) {
+    printf("Press T to try again or B to go back to the main menu.");
+    scanf("%c",try);
+    if (strcasecmp(try,"t")==0) {
+      addBook();
+    } else if (strcasecmp(try,"b")==0) {
+      success = 0;
+    }
+  }
+
+  if (success == 0) {
+    adminMain();
+  }
+
   return 0;
 }
 
@@ -103,7 +161,7 @@ int checkedOut() {
 }
 
 void quit() {
-  exit(0);
+  login();
 }
 
 // Prompt for username
@@ -210,4 +268,30 @@ int lineCount() {
   }
   fclose(fp);
   return count;
+}
+
+int countLines() {
+  FILE *fp2;
+  int line = 0;
+  char c;
+  fp2 = fopen("/Users/jnguyen/Documents/GitHub/minilibrary/Mylibrary.txt","r");
+  for (c = getc(fp2); c != EOF; c = getc(fp2)) {
+    if (c == '\n') {
+      line = line + 1;
+    }
+  }
+  return line;
+  fclose(fp2);
+}
+
+void printText() {
+  FILE *fp;
+  char c;
+  fp = fopen("/Users/jnguyen/Documents/GitHub/minilibrary/Mylibrary.txt","r");
+  c = fgetc(fp);
+  while (c != EOF) {
+    printf("%c",c);
+    c = fgetc(fp);
+  }
+  fclose(fp);
 }

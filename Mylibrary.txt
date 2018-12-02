@@ -1,3 +1,0 @@
-1,The Adventures of Yeetacus,Yeetacus Prime,Library,null,null
-2,I am a kitty cat,Neko-chan,User1,2018-10-15,2018-11-14
-3,Cabbage is good,Cabbage-kun,User3,2018-11-19,2018-12-19

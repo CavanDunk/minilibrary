@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-
+#include <time.h>
 // Prototypes
 int adminMain();
 int userMain();
@@ -19,23 +19,14 @@ int pass();
 void quit();
 int lineCount();
 int countLines();
-int postAddBook();
+void printText();
 
 
 // Global variables
 char choice;
 int bookId = 1;
+char currentUser[100];
 
-struct USER {
-  int id;
-  char first[100];
-  char last[100];
-  char acc[100];
-  char pass[100];
-  char cat;
-};
-
-struct USER user;
 
 int main() {
   login();
@@ -66,17 +57,21 @@ int adminMain() {
 }
 
 int userMain() {
+  scanf("%c",&choice);
   switch(choice) {
     case 'q':
       searchAuthor();
     case 's':
-      bookStatus();
+      searchBook();
     case 'u':
       checkedOut();
     case 'x':
       quit();
     default:
-      printf("Invalid input\n");
+      printf("Welcome to the USER MENU.\n");
+      uMain();
+      printf("What would you like to do? ");
+      userMain();
   }
   return 0;
 }
@@ -90,7 +85,7 @@ int aMain() {
   return 0;
 }
 
-int uMenu() {
+int uMain() {
   printf("Enter \"q\" for book querry by author sorted by book title.\n");
   printf("Enter \"s\" for the status of a specific book.\n");
   printf("Enter \"u\" to list the books you have checked out.\n");
@@ -153,7 +148,7 @@ void deleteBook() {
 	fp2 = fopen("copy.txt","w");
 	while(!feof(fp))
 	{
-		
+
 		strcpy(file, "\0");
 		fgets(file, 50, fp);
 		sscanf(file,"%d,%[^,],[^,],",&rando,title,name);
@@ -162,7 +157,7 @@ void deleteBook() {
 			fprintf(fp2," %s",file);
 		}
 	}
-	
+
 	fclose(fp);
 	fclose(fp2);
 	remove("Mylibrary.txt");
@@ -187,6 +182,7 @@ void deleteBook() {
 }
 
 int checkOut() {
+
   return 0;
 }
 
@@ -196,7 +192,7 @@ int returnBook() {
 
 // User Main Options
 void searchAuthor() {
-  	char try[2];
+  char try[2];
 	char name[50],search[50],title[50],line[50];
 	char c;
 	int count=0;
@@ -215,7 +211,7 @@ void searchAuthor() {
 		{
 			count++;
 			fprintf(fp2,"%s\n",line);
-		
+
 		}
 	}
 	fclose(fp2);
@@ -254,10 +250,10 @@ void searchAuthor() {
 }
 
 void searchBook() {
-  	char name[50],search[50],title[50],line[50],status[50],date[50];
+  char name[50],search[50],title[50],line[50],status[50],date[50];
 	char c;
 	char try[2];
-	int count=0,int feel=1;
+	int count=0,feel=1;
 	int id;
 	FILE *fp,*fp2;
 	printf("The name of the book you are looking for is?: ");
@@ -305,7 +301,7 @@ void searchBook() {
 		}
 		else if(strcasecmp(try,"b") == 0)
 		{
-			UserMain();
+			userMain();
 		}
 	}
 
@@ -313,23 +309,36 @@ void searchBook() {
 }
 
 int checkedOut() {
+  // User Info
+  int id;
+  char title[100], author[100], acc[100], co[100], due[100];
+
+  
+  time_t rawtime;
+  struct tm *timeinfo;
+
+  time(&rawtime);
+  timeinfo = localtime(&rawtime);
+
+  printf("Current Date is %04d-%02d-%02d\n",
+    timeinfo->tm_year+1900,
+    timeinfo->tm_mon+1,
+    timeinfo->tm_mday);
+
+
+
+
   return 0;
 }
 
 void quit() {
-  login();
+  exit(0);
 }
 
 // Prompt for username
 int login() {
-
-
-  // User Info
   int id;
-  char first[100];
-  char last[100];
-  char acc[100];
-  char p[100];
+  char first[100], last[100], acc[100], p[100];
   char cat;
 
   // User Input
@@ -340,7 +349,7 @@ int login() {
   scanf("%s",user);
 
   FILE *fp;
-  fp = fopen("/Users/jnguyen/Documents/GitHub/minilibrary/UserInfo.txt","r");
+  fp = fopen("UserInfo.txt","r");
 
   int success = 1;
   while(fscanf(fp,"%d,%10[^,],%10[^,],%10[^,],%10[^,],%c",&id,first,last,acc,p,&cat)==6) {
@@ -367,13 +376,8 @@ int login() {
 
 // Prompt for user's password
 int pass() {
-
-  // User Info
   int id;
-  char first[100];
-  char last[100];
-  char acc[100];
-  char p[100];
+  char first[100], last[100], acc[100], p[100];
   char cat;
 
   char pw[100];
@@ -381,12 +385,13 @@ int pass() {
   scanf("%s",pw);
 
   FILE *fp;
-  fp = fopen("/Users/jnguyen/Documents/GitHub/minilibrary/UserInfo.txt","r");
+  fp = fopen("UserInfo.txt","r");
 
   int success = 1;
   while(fscanf(fp,"%d,%10[^,],%10[^,],%10[^,],%10[^,],%c",&id,first,last,acc,p,&cat)==6) {
     if (strcmp(pw,p)==0) {
       printf("Welcome %s.\n",acc);
+      strcpy(currentUser,acc);
       if (cat == 'B') {
         userMain();
       } else {
@@ -410,7 +415,7 @@ int lineCount() {
   char filename[1000];
   char c;
 
-  fp = fopen("/Users/jnguyen/Documents/GitHub/minilibrary/UserInfo.txt", "r");
+  fp = fopen("UserInfo.txt", "r");
 
   if (fp == NULL) {
     printf("Could not open file.");
@@ -430,7 +435,7 @@ int countLines() {
   FILE *fp2;
   int line = 0;
   char c;
-  fp2 = fopen("/Users/jnguyen/Documents/GitHub/minilibrary/Mylibrary.txt","r");
+  fp2 = fopen("Mylibrary.txt","r");
   for (c = getc(fp2); c != EOF; c = getc(fp2)) {
     if (c == '\n') {
       line = line + 1;
@@ -443,7 +448,7 @@ int countLines() {
 void printText() {
   FILE *fp;
   char c;
-  fp = fopen("/Users/jnguyen/Documents/GitHub/minilibrary/Mylibrary.txt","r");
+  fp = fopen("Mylibrary.txt","r");
   c = fgetc(fp);
   while (c != EOF) {
     printf("%c",c);

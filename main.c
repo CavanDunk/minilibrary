@@ -134,6 +134,7 @@ void addBook() {
 		{
 			printf("Command not found/n");
 		}
+	}
 
 }
 
@@ -182,7 +183,7 @@ void deleteBook() {
 		{
 			printf("Command does not exist");
 		}
-
+	}
 }
 
 int checkOut() {

@@ -8,11 +8,11 @@ int userMain();
 int aMain();
 int uMain();
 void addBook();
-int deleteBook();
+void deleteBook();
 int checkOut();
 int returnBook();
-int query();
-int bookStatus();
+void searchAuthor();
+void searchBook();
 int checkedOut();
 int login();
 int pass();
@@ -68,7 +68,7 @@ int adminMain() {
 int userMain() {
   switch(choice) {
     case 'q':
-      query();
+      searchAuthor();
     case 's':
       bookStatus();
     case 'u':
@@ -130,11 +130,59 @@ void addBook() {
 		{
 			adminMain();
 		}
+		else
+		{
+			printf("Command not found/n");
+		}
 
 }
 
-int deleteBook() {
-  return 0;
+void deleteBook() {
+  	int rando=0;
+	int num,feel=1;
+	FILE *fp,*fp2;
+	char yr;
+	char try[2];
+	char file[200],check[200]="copy.txt";
+	char name[50],title[50];
+	printText();
+	fp = fopen("Mylibrary.txt","r");
+	printf("Give the ID of the book you wish to delete\n");
+	scanf(" %d",&num);
+	fp2 = fopen("copy.txt","w");
+	while(!feof(fp))
+	{
+		
+		strcpy(file, "\0");
+		fgets(file, 50, fp);
+		sscanf(file,"%d,%[^,],[^,],",&rando,title,name);
+		if(rando != num)
+		{
+			fprintf(fp2," %s",file);
+		}
+	}
+	
+	fclose(fp);
+	fclose(fp2);
+	remove("Mylibrary.txt");
+	rename("copy.txt","Mylibrary.txt");
+	while(feel != 0)
+	{
+		printf("Press t to try again or Press b to got back to main menu\n");
+		scanf(" %c",try);
+		if(strcasecmp(try,"t") == 0)
+		{
+			deleteBook();
+		}
+		else if(strcasecmp(try,"b") == 0)
+		{
+			adminMain();
+		}
+		else
+		{
+			printf("Command does not exist");
+		}
+
 }
 
 int checkOut() {
@@ -146,12 +194,121 @@ int returnBook() {
 }
 
 // User Main Options
-int query() {
-  return 0;
+void searchAuthor() {
+  	char try[2];
+	char name[50],search[50],title[50],line[50];
+	char c;
+	int count=0;
+	int id;
+	int feel = 1;
+	FILE *fp,*fp2;
+	printf("What author are you looking for?: ");
+	scanf("%[^'\n]s",search);
+	fp = fopen("Mylibrary.txt","r");
+	fp2 = fopen("sort.txt","w");
+	while(!feof(fp))
+	{
+		fgets(line,100,fp);
+		sscanf(line,"%d,%[^,],%[^,],",&id,title,name);
+		if(strcasecmp(search,name)==0)
+		{
+			count++;
+			fprintf(fp2,"%s\n",line);
+		
+		}
+	}
+	fclose(fp2);
+	fp2 = fopen("sort.txt","r");
+	c = fgetc(fp2);
+	while(c != EOF)
+	{
+		printf("%c",c);
+		c = fgetc(fp2);
+	}
+	fclose(fp);
+	fclose(fp2);
+	if(count==0)
+	{
+		printf("No Books By This Author!\n");
+	}
+	while(feel != 0)
+	{
+		printf("Press t to try again or Press b to go back to the main menu");
+		scanf(" %c",try);
+		if(strcasecmp(try,"t")== 0)
+		{
+			searchAuthor();
+		}
+		else if(strcasecmp(try,"b") == 0)
+		{
+			userMain();
+		}
+		else
+		{
+			printf("Command does not exist\n");
+		}
+	}
+
+
 }
 
-int bookStatus() {
-  return 0;
+void searchBook() {
+  	char name[50],search[50],title[50],line[50],status[50],date[50];
+	char c;
+	char try[2];
+	int count=0,int feel=1;
+	int id;
+	FILE *fp,*fp2;
+	printf("The name of the book you are looking for is?: ");
+	scanf("%s[^'\n]",search);
+	fp = fopen("Mylibrary.txt","r");
+	fp2 = fopen("book.txt","w");
+	while(!feof(fp))
+	{
+		fgets(line,100,fp);
+		sscanf(line,"%d,%[^,],%[^,],%[^,],[^,]",&id,title,name,status,date);
+		if(strcasecmp(search,title)==0)
+		{
+				count++;
+				if(strcasecmp(status,"library")==0)
+				{
+					fprintf(fp2,"%s in library\n",title);
+				}
+				else
+				{
+					fprintf(fp2,"%s Available after %s\n",title,date);
+				}
+		}
+	}
+	fclose(fp2);
+	fp2 = fopen("book.txt","r");
+	c = fgetc(fp2);
+	while(c != EOF)
+	{
+		printf("%c",c);
+		c = fgetc(fp2);
+	}
+	fclose(fp);
+	fclose(fp2);
+	if(count==0)
+	{
+		printf("No Book By This Name\n");
+	}
+	while(feel != 0)
+	{
+		printf("Press t to try again or b to go back to the main menu");
+		scanf(" %c",try);
+		if(strcasecmp(try,"t")== 0)
+		{
+			searchBook();
+		}
+		else if(strcasecmp(try,"b") == 0)
+		{
+			UserMain();
+		}
+	}
+
+
 }
 
 int checkedOut() {

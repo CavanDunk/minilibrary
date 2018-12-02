@@ -7,7 +7,7 @@ int adminMain();
 int userMain();
 int aMain();
 int uMain();
-int addBook();
+void addBook();
 int deleteBook();
 int checkOut();
 int returnBook();
@@ -99,40 +99,38 @@ int uMenu() {
 }
 
 // Admin Main Options
-int addBook() {
+void addBook() {
   char title[100];
 	char author[150];
-	//id=0;
+	int feel = 1;
 	char try[2];
 	FILE *fp;
 
 	fp = fopen("Mylibrary.txt","a");
 
 	printf("Enter Book Title: ");
-	scanf("%[^'\n]s", title);
-	printf(" ");
+	scanf(" %[^'\n]s", title);
 	printf("Enter Author's Name: ");
 	scanf(" %[^'\n]s",author);
 
-	bookId=countlines();
-
+	bookId=countLines();
 
 	fprintf(fp,"%d,%s,%s,library,null,null\n",bookId,title,author);
 	fclose(fp);
 	printf("Book %s was added succesfully!\n",title);
 	while(feel != 0)
 	{
-		printf("Press t to try again or b to go back to the main menu");
-		scanf(%c,try);
+		printf("Press t to try again or b to go back to the main menu\n");
+		scanf(" %c",try);
 		if(strcasecmp(try,"t")== 0)
 		{
 			addBook();
 		}
 		else if(strcasecmp(try,"b") == 0)
 		{
-			adminMenu();
+			adminMain();
 		}
-  return 0;
+
 }
 
 int deleteBook() {

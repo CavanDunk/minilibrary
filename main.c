@@ -313,21 +313,49 @@ int checkedOut() {
   int id;
   char title[100], author[100], acc[100], co[100], due[100];
 
-  
   time_t rawtime;
-  struct tm *timeinfo;
+  struct tm *tm;
+  char buffer[100];
 
   time(&rawtime);
-  timeinfo = localtime(&rawtime);
+  tm = localtime(&rawtime);
 
-  printf("Current Date is %04d-%02d-%02d\n",
-    timeinfo->tm_year+1900,
-    timeinfo->tm_mon+1,
-    timeinfo->tm_mday);
+  strftime(buffer,100,"%F",tm);
+  puts(buffer);
 
+  printf("====CHECKED OUT=====");
 
+  FILE *fp;
+  fp = fopen("Mylibrary.txt","r");
 
+  while(fscanf(fp,"%d,%100[^,],%100[^,],%100[^,],%100[^,],%100[^,]",&id,title,author,acc,co,due)==6) {
+    if(strcasecmp(currentUser,acc)==0) {
+      printf("%d,%100[^,],%100[^,],%100[^,],%100[^,],%100[^,]",&id,title,author,acc,co,due);
 
+      char buf[100];
+      char *arr[3];
+      int numArr[3];
+      int i = 0;
+      int j = 0;
+
+      strcpy(buf,due);
+      char *p = strtok(buf,"-");
+
+      while(p != NULL) {
+        arr[i++] = p;
+        p = strtok(NULL,"-");
+      }
+
+      while (j < 3) {
+        int temp = atoi(arr[j]);
+        numArr[j] = temp;
+      }
+
+      printf("%d",numArr[0]);
+    }
+  }
+
+  fclose(fp);
   return 0;
 }
 
@@ -406,6 +434,8 @@ int pass() {
     printf("Password is incorrect.\n");
     login();
   }
+
+  fclose(fp);
   return 0;
 }
 

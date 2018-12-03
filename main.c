@@ -1,27 +1,31 @@
+/*  Group Members: James Nguyen, Cavan Dunkley, Kimberly Cyzy
+*   Bonus Project Topic 4 : Mini Library
+*
+*/
+
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
 #include <time.h>
 
 // Prototypes
-int adminMain();
-int userMain();
-int aMain();
-int uMain();
-void addBook();
-void deleteBook();
-int checkOut();
-int returnBook();
-void searchAuthor();
-void searchBook();
-int checkedOut();
-int login();
-int pass();
-void quit();
-int lineCount();
-int countLines();
-void printText();
-
+int adminMain(); // Kimberly
+int userMain(); // Kimberly
+int aMain();  // Kimberly
+int uMain();  // Kimberly
+void addBook(); // Cavan
+void deleteBook(); // Cavan
+int checkOut(); // Cavan
+int returnBook(); // Kimberly
+void searchAuthor(); //Cavan
+void searchBook();  // Cavan
+int checkedOut(); // James
+int login();  // James
+int pass(); // James
+void quit(); // James
+int lineCount(); // James
+int countLines(); // James
+void printText(); // Cavan
 
 // Global variables
 char choice;
@@ -125,7 +129,7 @@ void addBook() {
 	printf("Book %s was added succesfully!\n",title);
 	while(feel != 0)
 	{
-		printf("Press t to try again or b to go back to the main menu\n");
+		printf("Press 'T' to try again. Press 'B' to go back to the main menu.\n");
 		scanf(" %s",&try);
 		if(strcasecmp(try,"t")== 0)
 		{
@@ -175,7 +179,7 @@ void deleteBook() {
 	rename("copy.txt","Mylibrary.txt");
 	while(feel != 0)
 	{
-		printf("Press t to try again or Press b to got back to main menu\n");
+		printf("Press 'T' to try again. Press 'B' to got back to main menu.\n");
 		scanf(" %s",&try);
 		if(strcasecmp(try,"t") == 0)
 		{
@@ -244,7 +248,7 @@ void searchAuthor() {
   // Asks if user wants to try again or go back to menu
 	while(feel != 0)
 	{
-		printf("Press t to try again or Press b to go back to the main menu");
+		printf("Press 'T' to try again. Press 'B' to go back to the main menu.");
 		scanf(" %s",&try);
 		if(strcasecmp(try,"t")== 0)
 		{
@@ -263,7 +267,7 @@ void searchAuthor() {
 }
 
 void searchBook() {
-  char name[50],search[50],title[50],line[50],status[50],date[50];
+  char name[50],search[50],title[50],line[50],status[50],date[50],due[50];
 	char c;
 	char try[2];
 	int count=0,feel=1;
@@ -276,7 +280,7 @@ void searchBook() {
 	while(!feof(fp))
 	{
 		fgets(line,100,fp);
-		sscanf(line,"%d,%[^,],%[^,],%[^,],[^,]",&id,title,name,status,date);
+		sscanf(line,"%d,%[^,],%[^,],%[^,],%[^,],%[^\n]",&id,title,name,status,date,due);
 		if(strcasecmp(search,title)==0)
 		{
 				count++;
@@ -286,7 +290,7 @@ void searchBook() {
 				}
 				else
 				{
-					fprintf(fp2,"%s Available after %s\n",title,date);
+					fprintf(fp2,"%s available after %s.\n",title,due);
 				}
 		}
 	}
@@ -308,7 +312,7 @@ void searchBook() {
   // Asks if user wants to try again or go back to menu
 	while(feel != 0)
 	{
-		printf("Press t to try again or b to go back to the main menu");
+		printf("Press 'T' to try again. Press 'B' to go back to the main menu.");
 		scanf(" %s",&try);
 		if(strcasecmp(try,"t")== 0)
 		{

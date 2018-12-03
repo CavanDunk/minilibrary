@@ -26,6 +26,7 @@ void quit(); // James
 int lineCount(); // James
 int countLines(); // James
 void printText(); // Cavan
+int checkId(int n);
 
 // Global variables
 char choice;
@@ -115,14 +116,15 @@ void addBook() {
 	char try[2];
 	FILE *fp;
 
-	fp = fopen("Mylibrary.txt","a");
+  fp = fopen("Mylibrary.txt","a");
 
+  printf("Enter BookID: ");
+  scanf(" %d",&bookId);
+  checkId(bookId);
 	printf("Enter Book Title: ");
 	scanf(" %[^'\n]s", title);
 	printf("Enter Author's Name: ");
 	scanf(" %[^'\n]s",author);
-
-	bookId=countLines();
 
 	fprintf(fp,"%d,%s,%s,library,null,null\n",bookId,title,author);
 	fclose(fp);
@@ -339,6 +341,7 @@ int checkedOut() {
   char buff[100]; // Used to store due date to compare it to the current date
   char *cmpdate[100]; // Stores the split due date string into year,month,day
 
+  // Use time.h in standard C library to retrieve the local time
   time_t now;
   time(&now);
   struct tm *local = localtime(&now);
@@ -546,4 +549,31 @@ void printText() {
     c = fgetc(fp);
   }
   fclose(fp);
+}
+
+int checkId(int n) {
+  char buf[128];
+  int id;
+  int ID[countLines()];
+  int i = 0;
+
+  FILE *fp;
+  fp = fopen("Mylibrary.txt","r");
+
+  while(fscanf(fp,"%d",&id)==1) {
+    ID[i] = id;
+    i++;
+  }
+  fclose(fp);
+
+  int j = 0;
+  while(j < (countLines()) {
+    if(n==ID[j]) {
+      printf("ID already exists.\n");
+      addBook();
+    }
+    j++;
+  }
+
+  return 0;
 }

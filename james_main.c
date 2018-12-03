@@ -75,11 +75,11 @@ int setdata_user(int choice) {
 int checkUserId(int n) {
   char buf[128];
   int id;
-  int ID[lineCount()];
+  int ID[countLines()];
   int i = 0;
 
   FILE *fp;
-  fp = fopen("uRecord.txt","r");
+  fp = fopen("Mylibrary.txt","r");
 
   while(fscanf(fp,"%d",&id)==1) {
     ID[i] = id;
@@ -90,11 +90,10 @@ int checkUserId(int n) {
   for (int j = 0; j < lineCount(); j++) {
     if(n == ID[j]) {
       printf("ID already exists.\n");
-      //main();
-      exit(0); // replace with main(); later
+      addBook();
     }
   }
-  return 1;
+  return 0;
 }
 
 int lineCount() {

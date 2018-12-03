@@ -2,6 +2,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <time.h>
+
 // Prototypes
 int adminMain();
 int userMain();
@@ -25,7 +26,7 @@ void printText();
 // Global variables
 char choice;
 int bookId = 1;
-char currentUser[100];
+char currentUser[100]; // Stores the username of whoever is currently logged in
 
 
 int main() {
@@ -38,16 +39,21 @@ int adminMain() {
   scanf("%c",&choice);
   switch(choice) {
     case 'a':
+      printf("\n");
       addBook();
     case 'd':
+      printf("\n");
       deleteBook();
     case 'o':
+      printf("\n");
       checkOut();
     case 'r':
+      printf("\n");
       returnBook();
     case 'x':
       quit();
     default:
+      printf("\n");
       printf("Welcome to the ADMIN MENU.\n");
       aMain();
       printf("What would you like to do? ");
@@ -60,14 +66,18 @@ int userMain() {
   scanf("%c",&choice);
   switch(choice) {
     case 'q':
+      printf("\n");
       searchAuthor();
     case 's':
+      printf("\n");
       searchBook();
     case 'u':
+      printf("\n");
       checkedOut();
     case 'x':
       quit();
     default:
+      printf("\n");
       printf("Welcome to the USER MENU.\n");
       uMain();
       printf("What would you like to do? ");
@@ -116,9 +126,10 @@ void addBook() {
 	while(feel != 0)
 	{
 		printf("Press t to try again or b to go back to the main menu\n");
-		scanf(" %c",try);
+		scanf(" %s",&try);
 		if(strcasecmp(try,"t")== 0)
 		{
+      printf("\n");
 			addBook();
 		}
 		else if(strcasecmp(try,"b") == 0)
@@ -165,9 +176,10 @@ void deleteBook() {
 	while(feel != 0)
 	{
 		printf("Press t to try again or Press b to got back to main menu\n");
-		scanf(" %c",try);
+		scanf(" %s",&try);
 		if(strcasecmp(try,"t") == 0)
 		{
+      printf("\n");
 			deleteBook();
 		}
 		else if(strcasecmp(try,"b") == 0)
@@ -200,7 +212,7 @@ void searchAuthor() {
 	int feel = 1;
 	FILE *fp,*fp2;
 	printf("What author are you looking for?: ");
-	scanf("%[^'\n]s",search);
+	scanf(" %[^'\n]s",search);
 	fp = fopen("Mylibrary.txt","r");
 	fp2 = fopen("sort.txt","w");
 	while(!feof(fp))
@@ -228,12 +240,15 @@ void searchAuthor() {
 	{
 		printf("No Books By This Author!\n");
 	}
+
+  // Asks if user wants to try again or go back to menu
 	while(feel != 0)
 	{
 		printf("Press t to try again or Press b to go back to the main menu");
-		scanf(" %c",try);
+		scanf(" %s",&try);
 		if(strcasecmp(try,"t")== 0)
 		{
+      printf("\n");
 			searchAuthor();
 		}
 		else if(strcasecmp(try,"b") == 0)
@@ -245,8 +260,6 @@ void searchAuthor() {
 			printf("Command does not exist\n");
 		}
 	}
-
-
 }
 
 void searchBook() {
@@ -291,12 +304,15 @@ void searchBook() {
 	{
 		printf("No Book By This Name\n");
 	}
+
+  // Asks if user wants to try again or go back to menu
 	while(feel != 0)
 	{
 		printf("Press t to try again or b to go back to the main menu");
-		scanf(" %c",try);
+		scanf(" %s",&try);
 		if(strcasecmp(try,"t")== 0)
 		{
+      printf("\n");
 			searchBook();
 		}
 		else if(strcasecmp(try,"b") == 0)
@@ -304,58 +320,86 @@ void searchBook() {
 			userMain();
 		}
 	}
-
-
 }
 
+// Function listing the books checked out by currentUser and whether or not book is overdue
 int checkedOut() {
-  // User Info
-  int id;
+
+  // Book Info Variables
+  int id, year, month, day;
   char title[100], author[100], acc[100], co[100], due[100];
 
-  time_t rawtime;
-  struct tm *tm;
-  char buffer[100];
+  char buff[100]; // Used to store due date to compare it to the current date
+  char *cmpdate[100]; // Stores the split due date string into year,month,day
 
-  time(&rawtime);
-  tm = localtime(&rawtime);
+  time_t now;
+  time(&now);
+  struct tm *local = localtime(&now);
 
-  strftime(buffer,100,"%F",tm);
-  puts(buffer);
+  year = local->tm_year+1900;
+  month = local->tm_mon+1;
+  day = local->tm_mday;
 
-  printf("====CHECKED OUT=====");
+  printf("Today is %d-%d-%d.\n",year,month,day);
+  printf("====CHECKED OUT=====\n");
 
   FILE *fp;
   fp = fopen("Mylibrary.txt","r");
 
-  while(fscanf(fp,"%d,%100[^,],%100[^,],%100[^,],%100[^,],%100[^,]",&id,title,author,acc,co,due)==6) {
+  // Copies each line of Mylibrary.txt into corresponding Book Info Variables
+  while (fscanf(fp,"%d,%100[^,],%100[^,],%100[^,],%100[^,],%100[^\n]",&id,title,author,acc,co,due)==6) {
+    // If the currentUser matches the account field in Mylibrary.txt, the following code will execute
     if(strcasecmp(currentUser,acc)==0) {
-      printf("%d,%100[^,],%100[^,],%100[^,],%100[^,],%100[^,]",&id,title,author,acc,co,due);
 
-      char buf[100];
-      char *arr[3];
-      int numArr[3];
+      // Prints the line that relates to the current user
+      printf("%d,%s,%s,%s,%s,%s ",id,title,author,acc,co,due);
+
+      /* Copies and splits up the duedate string field
+      by using "-" as the delimiter and stores the split string into cmpdate */
+      strcpy(buff,due);
+      char *p = strtok(buff,"-");
       int i = 0;
-      int j = 0;
-
-      strcpy(buf,due);
-      char *p = strtok(buf,"-");
-
-      while(p != NULL) {
-        arr[i++] = p;
+      while (p!=NULL) {
+        cmpdate[i++] = p;
         p = strtok(NULL,"-");
       }
 
-      while (j < 3) {
-        int temp = atoi(arr[j]);
-        numArr[j] = temp;
+      /* Compares the current date to due date and prints OVERDUE
+      if due date is greater than current date */
+      if(year > atoi(cmpdate[0])) {
+        printf("OVERDUE");
       }
-
-      printf("%d",numArr[0]);
+      if(year = atoi(cmpdate[0])) {
+        if(month > atoi(cmpdate[1])) {
+          printf("OVERDUE");
+        }
+        if(month = atoi(cmpdate[1])) {
+          if(day > atoi(cmpdate[2])) {
+            printf("OVERDUE");
+          }
+        }
+      }
+      printf("\n");
     }
   }
-
   fclose(fp);
+
+  // Asks if user wants to try again or go back to menu
+  char try[2];
+  int feel = 1;
+  while(feel != 0){
+		printf("Press 'T' to try again. Press 'B' to got back to main menu. ");
+		scanf(" %s",&try);
+		if(strcasecmp(try,"t") == 0){
+      printf("\n");
+      checkedOut();
+		} else if(strcasecmp(try,"b") == 0) {
+			userMain();
+		} else {
+			printf("Command does not exist");
+		}
+	}
+
   return 0;
 }
 
@@ -363,8 +407,9 @@ void quit() {
   exit(0);
 }
 
-// Prompt for username
+// Function for logging in to Library System. Checks if username exists.
 int login() {
+  // User Info Variables
   int id;
   char first[100], last[100], acc[100], p[100];
   char cat;
@@ -373,12 +418,14 @@ int login() {
   char user[100];
   char welcome[100];
 
+  // Username Prompt
   printf("USERNAME: ");
   scanf("%s",user);
 
   FILE *fp;
   fp = fopen("UserInfo.txt","r");
 
+  // Copies each line from UserInfo.txt into corresponding User Info Variables
   int success = 1;
   while(fscanf(fp,"%d,%10[^,],%10[^,],%10[^,],%10[^,],%c",&id,first,last,acc,p,&cat)==6) {
     if (strcasecmp(user,acc)==0) {
@@ -398,16 +445,17 @@ int login() {
   }
 
   fclose(fp);
-
   return 0;
 }
 
-// Prompt for user's password
+// Function checks if password matches the saved password for currentUser
 int pass() {
+  // User Info Variables
   int id;
   char first[100], last[100], acc[100], p[100];
   char cat;
 
+  // Password Prompt
   char pw[100];
   printf("PASSWORD: ");
   scanf("%s",pw);
@@ -415,11 +463,14 @@ int pass() {
   FILE *fp;
   fp = fopen("UserInfo.txt","r");
 
+  // Copies each line from UserInfo.txt into corresponding User Info Variable
   int success = 1;
   while(fscanf(fp,"%d,%10[^,],%10[^,],%10[^,],%10[^,],%c",&id,first,last,acc,p,&cat)==6) {
     if (strcmp(pw,p)==0) {
       printf("Welcome %s.\n",acc);
       strcpy(currentUser,acc);
+      // If user is Borrrower, program will redirect to the User's menu.
+      // Otherwise, program will direct to Admin's menu.
       if (cat == 'B') {
         userMain();
       } else {
@@ -439,6 +490,7 @@ int pass() {
   return 0;
 }
 
+// This function was used to count the number of lines in UserInfo.txt
 int lineCount() {
   FILE *fp;
   int count = 0;
@@ -461,6 +513,7 @@ int lineCount() {
   return count;
 }
 
+// This function was used to count the number of lines in Mylibrary.txt
 int countLines() {
   FILE *fp2;
   int line = 0;
@@ -475,6 +528,7 @@ int countLines() {
   fclose(fp2);
 }
 
+// This function is used to print Mylibrary.txt
 void printText() {
   FILE *fp;
   char c;

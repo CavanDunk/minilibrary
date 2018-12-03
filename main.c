@@ -203,13 +203,21 @@ void deleteBook() {
 
 void checkOut() {
 	FILE *fp,*fp2,*fp3;
-	char user[50],title[50],name[50],status[50],date[50],due[50];
+	char user[100],title[100],name[100],status[100],date[100],due[100];
 	char fil[200],line[100];
-	char first[50],last[50],uname[50];
-	char try[2];
+	char first[100],last[100],uname[100];
+	char try[40];
 	int id,num,bookCheck=0,myguy;
 	int exist = 0;
 	int feel = 1;
+	int year,month,day;
+	time_t now;
+	time(&now);
+	struct tm *local = localtime(&now);
+
+	year = local->tm_year+1900;
+	month = local->tm_mon+1;
+	day=local->tm_mday;
 	fp = fopen("UserInfo.txt","r");
 	fp2 = fopen("Mylibrary.txt","r");
 	fp3 = fopen("check.txt","w");
@@ -224,7 +232,7 @@ void checkOut() {
 			printf("user exist\n");
 			exist = 1;
 		}
-
+		
 	}
 	if(exist==0)
 	{
@@ -247,26 +255,28 @@ void checkOut() {
 	{
 		printf("Give the Id of the book you wish to check out\n");
 		scanf("%d",&myguy);
+		rewind(fp2);
 		while(!feof(fp2))
 		{
-			fgets(fil, 100, fp2);
-			sscanf(fil," %d,%[^,],%[^,],%[^,]",&num,&title,&name,&status);
-			if(num == myguy)
+			fgets(fil,256, fp2);
+			sscanf(fil," %d,%[^,],[^,],[^,],",&num,&title,&name,&status);
+			if(num!=myguy)
 			{
 				fprintf(fp3," %s",fil);
-			}
+				fflush(fp3);
+			}	
 			else
 			{
-				fprintf(fp3," %d,%s,%s,%s",&num,&title,&name,&user);
-
+				fprintf(fp3,"%d,%s,%s,%s,%d-%d-%d,%d-%d-%d\n",num,&title,&name,&user,year,month,day,year,month,day+10);
+				fflush(fp3);
 			}
 		}
-		printf("checked out!");
+		printf("checked out!\n");
 		fclose(fp3);
 		fclose(fp2);
 		fclose(fp);
-//		remove("Mylibrary.txt");
-//		rename("check.txt","Mylibrary.txt");
+		remove("Mylibrary.txt");
+		rename("check.txt","Mylibrary.txt");
 	}
 	else
 	{
@@ -276,23 +286,24 @@ void checkOut() {
 	}
 //	remove("Mylibrary.txt");
 //	rename("check.txt","Mylibrary.txt");
-//	while(feel != 0)
-//	{
-//		printf("Press t to try again or Press b to got back to main menu\n");
-//		scanf(" %c",try);
-//		if(strcasecmp(try,"t") == 0)
-//		{
-//			checkOut();
-//		}
-//		else if(strcasecmp(try,"b") == 0)
-//		{
-//			adminMain();
-//		}
-//		else
-//		{
-//			printf("Command does not exist\n");
-//		}
-//	}
+	while(feel != 0)
+	{
+		printf("Press t to try again or Press b to got back to main menu\n");
+		scanf(" %s",try);
+		if(strcasecmp(try,"t") == 0)
+		{
+			checkOut();
+		}
+		else if(strcasecmp(try,"b") == 0)
+		{
+			adminMain();
+		}
+		else
+		{
+			printf("Command does not exist\n");
+		}
+	}
+
 
  }
 

@@ -133,7 +133,7 @@ void addBook() {
 		scanf(" %s",&try);
 		if(strcasecmp(try,"t")== 0)
 		{
-      printf("\n");
+      			printf("\n");
 			addBook();
 		}
 		else if(strcasecmp(try,"b") == 0)
@@ -183,7 +183,7 @@ void deleteBook() {
 		scanf(" %s",&try);
 		if(strcasecmp(try,"t") == 0)
 		{
-      printf("\n");
+     		 	printf("\n");
 			deleteBook();
 		}
 		else if(strcasecmp(try,"b") == 0)
@@ -252,7 +252,7 @@ void searchAuthor() {
 		scanf(" %s",&try);
 		if(strcasecmp(try,"t")== 0)
 		{
-      printf("\n");
+     	 		printf("\n");
 			searchAuthor();
 		}
 		else if(strcasecmp(try,"b") == 0)
@@ -316,7 +316,7 @@ void searchBook() {
 		scanf(" %s",&try);
 		if(strcasecmp(try,"t")== 0)
 		{
-      printf("\n");
+      			printf("\n");
 			searchBook();
 		}
 		else if(strcasecmp(try,"b") == 0)
@@ -395,8 +395,8 @@ int checkedOut() {
 		printf("Press 'T' to try again. Press 'B' to got back to main menu. ");
 		scanf(" %s",&try);
 		if(strcasecmp(try,"t") == 0){
-      printf("\n");
-      checkedOut();
+      			printf("\n");
+      			checkedOut();
 		} else if(strcasecmp(try,"b") == 0) {
 			userMain();
 		} else {

@@ -7,6 +7,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <time.h>
+#define MAX 100
 
 // Prototypes
 int adminMain(); // Kimberly
@@ -27,6 +28,7 @@ int lineCount(); // James
 int countLines(); // James
 void printText(); // Cavan
 int checkId(int n);
+int checkIdExists(int n);
 
 // Global variables
 char choice;
@@ -199,7 +201,7 @@ void deleteBook() {
 	}
 }
 
-int checkOut() {
+void checkOut() {
 	FILE *fp,*fp2,*fp3;
 	char user[50],title[50],name[50],status[50],date[50],due[50];
 	char fil[200],line[100];
@@ -222,7 +224,7 @@ int checkOut() {
 			printf("user exist\n");
 			exist = 1;
 		}
-		
+
 	}
 	if(exist==0)
 	{
@@ -252,11 +254,11 @@ int checkOut() {
 			if(num == myguy)
 			{
 				fprintf(fp3," %s",fil);
-			}	
+			}
 			else
 			{
 				fprintf(fp3," %d,%s,%s,%s",&num,&title,&name,&user);
-				
+
 			}
 		}
 		printf("checked out!");
@@ -297,6 +299,7 @@ int checkOut() {
 
 
 int returnBook() {
+
   return 0;
 }
 
@@ -659,7 +662,7 @@ int checkId(int n) {
   fclose(fp);
 
   int j = 0;
-  while(j < (countLines()) {
+  while(j < (countLines())) {
     if(n==ID[j]) {
       printf("ID already exists.\n");
       addBook();

@@ -192,7 +192,7 @@ void deleteBook() {
 		}
 		else
 		{
-			printf("Command does not exist");
+			printf("Command does not exist\n");
 		}
 	}
 }
@@ -323,6 +323,9 @@ void searchBook() {
 		{
 			userMain();
 		}
+    else {
+      printf("Command does not exist.\n");
+    }
 	}
 }
 
@@ -400,7 +403,7 @@ int checkedOut() {
 		} else if(strcasecmp(try,"b") == 0) {
 			userMain();
 		} else {
-			printf("Command does not exist");
+			printf("Command does not exist\n");
 		}
 	}
 

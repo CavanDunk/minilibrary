@@ -15,7 +15,7 @@ int aMain();  // Kimberly
 int uMain();  // Kimberly
 void addBook(); // Cavan
 void deleteBook(); // Cavan
-int checkOut(); // Cavan
+void checkOut(); // Cavan
 int returnBook(); // Kimberly
 void searchAuthor(); //Cavan
 void searchBook();  // Cavan
@@ -200,9 +200,101 @@ void deleteBook() {
 }
 
 int checkOut() {
+	FILE *fp,*fp2,*fp3;
+	char user[50],title[50],name[50],status[50],date[50],due[50];
+	char fil[200],line[100];
+	char first[50],last[50],uname[50];
+	char try[2];
+	int id,num,bookCheck=0,myguy;
+	int exist = 0;
+	int feel = 1;
+	fp = fopen("UserInfo.txt","r");
+	fp2 = fopen("Mylibrary.txt","r");
+	fp3 = fopen("check.txt","w");
+	printf("Enter the User\n");
+	scanf("%s",&user);
+	while(!feof(fp))
+	{
+		fgets(line,100,fp);
+		sscanf(line,"%d,%[^,],%[^,],%[^,]",&id,&first,&last,&uname);
+		if(strcasecmp(user,uname) == 0)
+		{
+			printf("user exist\n");
+			exist = 1;
+		}
+		
+	}
+	if(exist==0)
+	{
+		printf("User does not exist\n");
+		bookCheck = 5;
+	}
+	else
+	{
+		while(!feof(fp2))
+		{
+			fgets(line,100,fp2);
+			sscanf(line,"%d,%[^,],%[^,],%[^,]",&id,&title,&name,&status);
+			if(strcasecmp(user,status)==0)
+			{
+				bookCheck++;
+			}
+		}
+	}
+	if(bookCheck < 3)
+	{
+		printf("Give the Id of the book you wish to check out\n");
+		scanf("%d",&myguy);
+		while(!feof(fp2))
+		{
+			fgets(fil, 100, fp2);
+			sscanf(fil," %d,%[^,],%[^,],%[^,]",&num,&title,&name,&status);
+			if(num == myguy)
+			{
+				fprintf(fp3," %s",fil);
+			}	
+			else
+			{
+				fprintf(fp3," %d,%s,%s,%s",&num,&title,&name,&user);
+				
+			}
+		}
+		printf("checked out!");
+		fclose(fp3);
+		fclose(fp2);
+		fclose(fp);
+//		remove("Mylibrary.txt");
+//		rename("check.txt","Mylibrary.txt");
+	}
+	else
+	{
+		fclose(fp3);
+		fclose(fp2);
+		fclose(fp);
+	}
+//	remove("Mylibrary.txt");
+//	rename("check.txt","Mylibrary.txt");
+//	while(feel != 0)
+//	{
+//		printf("Press t to try again or Press b to got back to main menu\n");
+//		scanf(" %c",try);
+//		if(strcasecmp(try,"t") == 0)
+//		{
+//			checkOut();
+//		}
+//		else if(strcasecmp(try,"b") == 0)
+//		{
+//			adminMain();
+//		}
+//		else
+//		{
+//			printf("Command does not exist\n");
+//		}
+//	}
 
-  return 0;
-}
+ }
+
+
 
 int returnBook() {
   return 0;
